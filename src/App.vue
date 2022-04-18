@@ -1,12 +1,10 @@
 <template>
-  <UkraineMap />
+  <UkraineMap class="ukraine-map" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
 import UkraineMap from "./components/UkraineMap.vue";
-
 import "vue-cesium/dist/index.css";
 
 export default defineComponent({
@@ -22,13 +20,14 @@ export default defineComponent({
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   background-color: #fdf0f0;
   align-items: center;
   display: flex;
   justify-content: center;
-  max-height: 100vh;
-  padding: 20px;
+}
+.ukraine-map {
+  max-height: 90vh;
+  margin: 5vh;
 }
 </style>
