@@ -1,38 +1,28 @@
 <template>
-  <svg
-    width="1000"
-    height="670"
-    viewBox="0 0 1000 670"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g id="map">
-      <g id="Regions">
-        <Region
-          v-for="region in regions"
-          :key="region.id"
-          :title="region.title"
-          :titleX="region.titleX"
-          :titleY="region.titleY"
-          :fontSize="region.fontSize"
-          :d="region.d"
-        />
-      </g>
-    </g>
-  </svg>
+  <SvgUkraineMap :regions="regions" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Region from "./Region.vue";
-import regions from "../data/regions.json";
+import { defineComponent } from "@vue/runtime-core";
+import SvgUkraineMap from "./svg/UkraineMap.vue";
+import { RegionRepository } from "../repository/RegionRepository";
+import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatusService";
+import { Region } from "@/types/Region";
 
 export default defineComponent({
-  components: { Region },
-  name: "UkraineMap",
+  components: { SvgUkraineMap },
+  async mounted() {
+    let statusService = new TelegramRegionStatusService();
+    let regions: Region[] = [];
+    for (let region of new RegionRepository().getAll()) {
+      region.status = await statusService.getStatus(region);
+      regions.push(region);
+    }
+    this.regions = regions;
+  },
   data() {
     return {
-      regions,
+      regions: [] as Region[],
     };
   },
 });

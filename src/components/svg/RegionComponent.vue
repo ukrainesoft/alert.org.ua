@@ -10,6 +10,7 @@
   <text
     :fill="textFill"
     :stroke="textStroke"
+    stroke-width="0.1"
     xml:space="preserve"
     style="white-space: pre"
     :font-family="fontFamily"
@@ -23,10 +24,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "BaseRegion",
+export default {
   props: {
     d: { type: String }, // D property of the path in the svg
     title: { type: String, default: "" },
@@ -36,12 +34,12 @@ export default defineComponent({
     textFill: { type: String, default: "#ffffff" },
     stroke: { type: String, default: "white" },
     textStroke: { type: String, default: "#ffffff" },
-    strokeWidth: { type: String, default: "2" },
+    strokeWidth: { type: String, default: "1" },
     strokeLinecap: { type: String, default: "round" },
     strokeLinejoin: { type: String, default: "round" },
     fontFamily: { type: String, default: "Roboto Slab" },
     fontSize: { type: Number, default: 22 },
     letterSpacing: { type: Number, default: 0 },
   },
-});
+};
 </script>
