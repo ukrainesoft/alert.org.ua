@@ -5,6 +5,7 @@
         <RegionComponent
           v-for="region in svgRegions"
           :key="region.id"
+          :id="region.id"
           :title="region.title"
           :titleX="region.titleX"
           :titleY="region.titleY"

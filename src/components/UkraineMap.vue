@@ -1,5 +1,7 @@
 <template>
-  <SvgUkraineMap :regions="regions" />
+  <Transition appear mode="out-in">
+    <SvgUkraineMap :regions="regions" />
+  </Transition>
 </template>
 
 <script lang="ts">
@@ -10,14 +12,32 @@ import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatu
 import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
 
-const inDangerTitle = (count: number) =>
-  count > 0
-    ? `❗${count} regions are in danger right now`
+// TODO Move to the config file
+const META_OG_CONFIG = {
+  "og:site_name": "Alert.Org.Ua",
+  "og:type": "website",
+  "og:url": "https://alert.org.ua/",
+  "og:image": "https://alert.org.ua/ukraine.svg",
+};
+
+const getInDangerTitle = (regions: Region[]) =>
+  regions.length > 0
+    ? `❗${
+        regions.length === 1 ? regions[0].title : regions.length + "regions are"
+      }   in danger right now`
     : `💛 💙 Looks like all regions are safe`;
-const inDangerDescription = (count: number) =>
-  count > 0
-    ? `❗❗ ${count} are in danger right now`
+
+const getInDangerDescription = (regions: Region[]) => {
+  let regionsList = regions.map((region: Region) => region.title).join(", ");
+  return regions.length > 0
+    ? `❗❗ ${regionsList} are in a danger right now`
     : `Looks like all regions are safe`;
+};
+
+const getOgImage = (regions: Region[]) =>
+  META_OG_CONFIG["og:image"] +
+  "?" +
+  regions.map((region: Region) => region.title).join(",");
 
 export default defineComponent({
   components: { SvgUkraineMap },
@@ -39,20 +59,21 @@ export default defineComponent({
     const regionsInADanger = this.regions.filter(
       (region: Region) => region.status !== Status.OK
     );
-    const title = inDangerTitle(regionsInADanger.length);
-    const description = inDangerDescription(
-      regionsInADanger.map((region: Region) => region.title).join(", ")
-    );
+
+    const title = getInDangerTitle(regionsInADanger);
 
     return {
       title,
       meta: [
-        // TODO Move to config
         { property: "og:title", content: title },
-        { property: "og:site_name", content: "Alert.Org.Ua" },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: "https://alert.org.ua/" },
-        { property: "og:description", content: description },
+        {
+          property: "og:image",
+          content: getOgImage(regionsInADanger),
+        },
+        {
+          property: "og:description",
+          content: getInDangerDescription(regionsInADanger),
+        },
       ],
     };
   },

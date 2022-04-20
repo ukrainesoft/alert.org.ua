@@ -8,7 +8,7 @@ function sendRequest(url: string) {
   return fetch(url);
 }
 
-async function* getMessagesTexts(response: string): AsyncGenerator<string> {
+function* getMessagesTexts(response: string): Generator<string> {
   const div = document.createElement("div");
   div.innerHTML = response;
   const messages = div.getElementsByClassName("js-message_text");
@@ -34,13 +34,8 @@ export async function getStatuses(): Promise<Record<string, Status>> {
         slugs.push(newLink[0]);
       }
     }
-
     const messagesFromApi = getMessagesTexts(responseText);
-    const messages = [];
-    for await (const message of messagesFromApi) {
-      messages.unshift(message);
-    }
-    for (const message of messages) {
+    for (const message of [...messagesFromApi].reverse()) {
       const links = [...message.matchAll(/<a.+>(.+)<\/a>/gm)];
       let status = Status.OK;
       if (message.match("F09F9FA1")) {
