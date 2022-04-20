@@ -1,11 +1,11 @@
 <template>
+  <metainfo />
   <UkraineMap class="ukraine-map" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import UkraineMap from "./components/UkraineMap.vue";
-import "vue-cesium/dist/index.css";
 
 export default defineComponent({
   name: "App",

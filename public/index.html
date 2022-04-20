@@ -1,18 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html prefix="og: http://ogp.me/ns#">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>icon.svg">
+    <meta charset="utf-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <meta name="description" content="<%= htmlWebpackPlugin.options.description %>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>icon.svg" />
+    <link rel="canonical" href="<%= htmlWebpackPlugin.options.url %>" />
+    <meta
+      name="description"
+      content="<%= htmlWebpackPlugin.options.description %>"
+    />
     <meta name="keywords" content="<%= htmlWebpackPlugin.options.keywords %>" />
-    <meta name="author" content="lis-dev">
+    <meta name="author" content="lis-dev" />
+    <meta
+      propery="og:title"
+      content="<%= htmlWebpackPlugin.options.ogTitle %>"
+    />
+    <meta
+      propery="og:site_name"
+      content="<%= htmlWebpackPlugin.options.ogSiteName %>"
+    />
+    <meta
+      propery="og:description"
+      content="<%= htmlWebpackPlugin.options.ogDescription %>"
+    />
+    <meta
+      propery="og:image"
+      content="<%= htmlWebpackPlugin.options.ogImage %>"
+    />
+
+    <meta
+      name="twitter:title"
+      content="<%= htmlWebpackPlugin.options.ogTitle %>"
+    />
+    <meta
+      name="twitter:description"
+      content="<%= htmlWebpackPlugin.options.ogDescription %>"
+    />
+    <meta
+      name="twitter:domain"
+      content="<%= htmlWebpackPlugin.options.url %>"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="<%= htmlWebpackPlugin.options.ogImage %>"
+    />
+    <meta name="twitter:site" content="<%= htmlWebpackPlugin.options.url %>" />
+    <meta name="twitter:creator" content="lis-dev" />
+
+    <meta propery="og:type" content="<%= htmlWebpackPlugin.options.ogType %>" />
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+        properly without JavaScript enabled. Please enable it to
+        continue.</strong
+      >
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
