@@ -61,9 +61,6 @@ export default defineComponent({
     const regionsInADanger = this.regions.filter(
       (region: Region) => region.status !== Status.OK
     );
-
-    console.log(regionsInADanger);
-
     const title = getInDangerTitle(regionsInADanger);
 
     return {

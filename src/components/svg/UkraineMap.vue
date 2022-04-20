@@ -30,6 +30,7 @@ import { Status } from "@/types/Status";
 // TODO use color schemas
 const COLOR_FILL_DEFAULT = "#f3d2d1";
 const COLOR_FILL_ALERT = "#b14e45";
+const COLOR_FILL_WARNING = "#d27f75";
 
 export default defineComponent({
   name: "UkraineSvgMap",
@@ -43,7 +44,6 @@ export default defineComponent({
   data() {
     return {
       COLOR_FILL_DEFAULT,
-      COLOR_FILL_ALERT,
       svgRegions: new SvgRegionRepository().getAll(),
     };
   },
@@ -55,6 +55,9 @@ export default defineComponent({
         }
         if (statusRegion.status === Status.ALERT) {
           return COLOR_FILL_ALERT;
+        }
+        if (statusRegion.status === Status.WARNING) {
+          return COLOR_FILL_WARNING;
         }
         return COLOR_FILL_DEFAULT;
       }
