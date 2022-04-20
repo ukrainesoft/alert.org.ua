@@ -23,7 +23,9 @@ const META_OG_CONFIG = {
 const getInDangerTitle = (regions: Region[]) =>
   regions.length > 0
     ? `❗${
-        regions.length === 1 ? regions[0].title : regions.length + "regions are"
+        regions.length === 1
+          ? regions[0].title
+          : regions.length + " regions are"
       }   in danger right now`
     : `💛 💙 Looks like all regions are safe`;
 
@@ -31,7 +33,7 @@ const getInDangerDescription = (regions: Region[]) => {
   let regionsList = regions.map((region: Region) => region.title).join(", ");
   return regions.length > 0
     ? `❗❗ ${regionsList} are in a danger right now`
-    : `Looks like all regions are safe`;
+    : `💛 💙  Looks like all regions are safe`;
 };
 
 const getOgImage = (regions: Region[]) =>
@@ -59,6 +61,8 @@ export default defineComponent({
     const regionsInADanger = this.regions.filter(
       (region: Region) => region.status !== Status.OK
     );
+
+    console.log(regionsInADanger);
 
     const title = getInDangerTitle(regionsInADanger);
 
