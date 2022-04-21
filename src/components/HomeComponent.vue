@@ -1,7 +1,5 @@
 <template>
-  <Transition appear mode="out-in">
-    <SvgUkraineMap :regions="regions" />
-  </Transition>
+  <SvgUkraineMap :regions="regions" />
 </template>
 
 <script lang="ts">
@@ -19,6 +17,8 @@ const META_OG_CONFIG = {
   "og:url": "https://alert.org.ua/",
   "og:image": "https://alert.org.ua/ukraine.svg",
 };
+const RERENDER_INTERVAL_SEC = 1;
+const REFRESH_INTERVAL_SEC = 30;
 
 const getInDangerTitle = (regions: Region[]) =>
   regions.length > 0
@@ -36,6 +36,16 @@ const getInDangerDescription = (regions: Region[]) => {
     : `💛 💙  Looks like all regions are safe`;
 };
 
+const loadRegions = async () => {
+  const statusService = new TelegramRegionStatusService();
+  let regions: Region[] = [];
+  for (let region of new RegionRepository().getAll()) {
+    region.status = await statusService.getStatus(region);
+    regions.push(region);
+  }
+  return regions;
+};
+
 const getOgImage = (regions: Region[]) =>
   META_OG_CONFIG["og:image"] +
   "?" +
@@ -44,22 +54,27 @@ const getOgImage = (regions: Region[]) =>
 export default defineComponent({
   components: { SvgUkraineMap },
   async mounted() {
-    let statusService = new TelegramRegionStatusService();
-    let regions: Region[] = [];
-    for (let region of new RegionRepository().getAll()) {
-      region.status = await statusService.getStatus(region);
-      regions.push(region);
-    }
-    this.regions = regions;
+    this.regions = await loadRegions();
+    this.timer = setInterval(async () => {
+      this.secondsBeforeNextUpdate -= RERENDER_INTERVAL_SEC;
+      if (this.secondsBeforeNextUpdate < 1) {
+        this.regions = await loadRegions();
+        this.secondsBeforeNextUpdate = REFRESH_INTERVAL_SEC;
+      }
+    }, RERENDER_INTERVAL_SEC * 1000);
   },
   data() {
     return {
       regions: [] as Region[],
+      interval: REFRESH_INTERVAL_SEC,
+      secondsBeforeNextUpdate: REFRESH_INTERVAL_SEC,
+      lastUpdate: 10000,
+      timer: null as any,
     };
   },
   metaInfo() {
     const regionsInADanger = this.regions.filter(
-      (region: Region) => region.status !== Status.OK
+      (region: Region) => region.status === Status.ALERT
     );
     const title = getInDangerTitle(regionsInADanger);
 
@@ -77,6 +92,9 @@ export default defineComponent({
         },
       ],
     };
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
   },
 });
 </script>
