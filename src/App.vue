@@ -1,16 +1,16 @@
 <template>
   <metainfo />
-  <UkraineMap class="ukraine-map" />
+  <HomeComponent class="ukraine-map" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import UkraineMap from "./components/UkraineMap.vue";
+import HomeComponent from "./components/HomeComponent.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    UkraineMap,
+    HomeComponent,
   },
 });
 </script>

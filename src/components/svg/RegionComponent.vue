@@ -1,48 +1,47 @@
 <template>
-  <g class="region" :id="id">
+  <g class="region" :id="region.id">
     <path
-      :d="d"
-      :fill="fill"
-      :stroke="stroke"
-      :stroke-width="strokeWidth"
-      :stroke-linecap="strokeLinecap"
-      :stroke-linejoin="strokeLinejoin"
+      :d="region.d"
+      :fill="region.fill"
+      :stroke="region.stroke || '#ffffff'"
+      :stroke-width="region.strokeWidth || 1"
+      :stroke-linecap="region.strokeLinecap || 'round'"
+      :stroke-linejoin="region.strokeLinejoin || 'round'"
     />
     <text
-      :fill="textFill"
-      :stroke="textStroke"
+      :fill="region.textFill || 'ffffff'"
+      :stroke="region.textStroke || '#ffffff'"
       stroke-width="0.1"
       xml:space="preserve"
       style="white-space: pre"
-      :font-family="fontFamily"
-      :font-size="fontSize"
-      :letter-spacing="letterSpacing"
+      :font-family="region.fontFamily || 'Roboto Slab'"
+      :font-size="region.fontSize || 20"
+      :letter-spacing="region.letterSpacing || 0"
     >
-      <tspan v-if="title && titleX && titleY" :x="titleX" :y="titleY">
-        {{ title }}
+      <tspan
+        v-if="region.title && region.titleX && region.titleY"
+        :x="region.titleX"
+        :y="region.titleY"
+      >
+        {{ region.title }}
       </tspan>
     </text>
   </g>
 </template>
 
-<script>
+<script lang="ts">
+import { SvgRegion } from "@/types/SvgRegion";
+import { PropType } from "vue";
+
 export default {
   props: {
-    d: { type: String }, // D property of the path in the svg
-    title: { type: String, default: "" },
-    titleX: { type: Number },
-    titleY: { type: Number },
-    fill: { type: String, default: "" },
-    textFill: { type: String, default: "#ffffff" },
-    stroke: { type: String, default: "white" },
-    textStroke: { type: String, default: "#ffffff" },
-    strokeWidth: { type: String, default: "1" },
-    strokeLinecap: { type: String, default: "round" },
-    strokeLinejoin: { type: String, default: "round" },
-    fontFamily: { type: String, default: "Roboto Slab" },
-    fontSize: { type: Number, default: 20 },
-    letterSpacing: { type: Number, default: 0 },
-    id: { type: String, default: "" },
+    region: { type: Object as PropType<SvgRegion>, required: true },
   },
 };
 </script>
+
+<style scoped>
+.region path {
+  transition: 0.3s fill ease;
+}
+</style>

@@ -9,6 +9,10 @@ export class TelegramRegionStatusService
 {
   private static regionStatuses: Record<string, Status> = {};
 
+  constructor() {
+    TelegramRegionStatusService.regionStatuses = {};
+  }
+
   async getStatus(region: Region): Promise<Status> {
     if (Object.keys(TelegramRegionStatusService.regionStatuses).length === 0) {
       TelegramRegionStatusService.regionStatuses = await getStatuses();
