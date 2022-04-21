@@ -1,13 +1,11 @@
 <template>
   <svg viewBox="0 0 1000 670" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g id="map">
-      <g id="Regions">
-        <RegionComponent
-          v-for="region in svgRegions"
-          :key="region.id"
-          :region="region"
-        />
-      </g>
+      <RegionComponent
+        v-for="region in svgRegions"
+        :key="region.id"
+        :region="region"
+      />
     </g>
   </svg>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <metainfo />
-  <HomeComponent class="ukraine-map" />
+  <HomeComponent />
 </template>
 
 <script lang="ts">
@@ -27,12 +27,5 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   height: 100%;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-.ukraine-map {
-  max-height: 90vh;
-  margin: 5vh;
 }
 </style>
