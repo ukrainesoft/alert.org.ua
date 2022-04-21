@@ -56,9 +56,6 @@ export default defineComponent({
         if (statusRegion.status === Status.ALERT) {
           return COLOR_FILL_ALERT;
         }
-        if (statusRegion.status === Status.WARNING) {
-          return COLOR_FILL_WARNING;
-        }
         return COLOR_FILL_DEFAULT;
       }
     },
