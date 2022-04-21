@@ -1,5 +1,10 @@
 <template>
-  <SvgUkraineMap :regions="regions" />
+  <div class="ukraine-map">
+    <SvgUkraineMap :regions="regions" />
+  </div>
+  <div class="creds">
+    <small v-html="credentials"></small>
+  </div>
 </template>
 
 <script lang="ts">
@@ -70,6 +75,7 @@ export default defineComponent({
       secondsBeforeNextUpdate: REFRESH_INTERVAL_SEC,
       lastUpdate: 10000,
       timer: null as any,
+      credentials: process.env.VUE_APP_CREDENTIALS,
     };
   },
   metaInfo() {
@@ -98,3 +104,23 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.ukraine-map {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.ukraine-map svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 90vh;
+}
+.creds {
+  bottom: 1vh;
+  right: 5vh;
+  position: absolute;
+}
+</style>
