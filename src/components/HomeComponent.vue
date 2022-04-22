@@ -2,6 +2,9 @@
   <div class="ukraine-map">
     <SvgUkraineMap :regions="regions" />
   </div>
+  <div class="timer">
+    <small @click="refreshRegions"> ↻ {{ secondsBeforeNextUpdate }}</small>
+  </div>
   <div class="creds">
     <small v-html="credentials"></small>
   </div>
@@ -63,10 +66,15 @@ export default defineComponent({
     this.timer = setInterval(async () => {
       this.secondsBeforeNextUpdate -= RERENDER_INTERVAL_SEC;
       if (this.secondsBeforeNextUpdate < 1) {
-        this.regions = await loadRegions();
-        this.secondsBeforeNextUpdate = REFRESH_INTERVAL_SEC;
+        await this.refreshRegions();
       }
     }, RERENDER_INTERVAL_SEC * 1000);
+  },
+  methods: {
+    async refreshRegions() {
+      this.regions = await loadRegions();
+      this.secondsBeforeNextUpdate = REFRESH_INTERVAL_SEC;
+    },
   },
   data() {
     return {
@@ -122,5 +130,12 @@ export default defineComponent({
   bottom: 1vh;
   right: 5vh;
   position: absolute;
+  text-align: right;
+}
+.timer {
+  bottom: 1vh;
+  left: 5vh;
+  position: absolute;
+  cursor: pointer;
 }
 </style>
