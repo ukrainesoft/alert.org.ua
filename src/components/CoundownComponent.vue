@@ -19,12 +19,10 @@ export default defineComponent({
   props: {
     seconds: {
       type: Number,
-      required: true,
       default: REFRESH_INTERVAL_SEC,
     },
     rerenderInterval: {
       type: Number,
-      required: false,
       default: RERENDER_INTERVAL_SEC,
     },
   },

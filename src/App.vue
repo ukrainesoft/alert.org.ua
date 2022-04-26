@@ -2,11 +2,13 @@
   <metainfo />
   <HomeComponent />
   <CredentialsComponent />
+  <ThemeSwitcher />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import CredentialsComponent from "./components/CredentialsComponent.vue";
+import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import HomeComponent from "./components/HomeComponent.vue";
 
 export default defineComponent({
@@ -14,40 +16,63 @@ export default defineComponent({
   components: {
     HomeComponent,
     CredentialsComponent,
+    ThemeSwitcher,
   },
 });
 </script>
 
-<style>
+<style lang="scss">
+$primary-color: #b14e45;
+$secondary-color: #f3d2d1;
+$background-color: #fff6f6;
+
+$primary-dark-color: #b14e45;
+$secondary-dark-color: #8a8a8a;
+$background-dark-color: #21262e;
+
 html,
 body {
   height: 100%;
   margin: 0;
-  background-color: #fff6f6;
+  background-color: $background-color;
+  color: #2c3e50;
+  font-family: Roboto Slab;
+}
+body.dark {
+  background-color: $background-dark-color;
+  color: $background-color;
+  a {
+    color: $primary-dark-color;
+  }
+  .region path {
+    fill: $secondary-dark-color;
+    stroke: $background-dark-color;
+  }
+  .region.alert path {
+    fill: $primary-dark-color;
+  }
 }
 #app {
-  font-family: Roboto Slab;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
   height: 100%;
   padding: 5px;
 }
 .region path {
-  fill: #f3d2d1;
+  fill: $secondary-color;
   stroke-width: 1;
-  stroke: #ffffff;
+  stroke: $background-color;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
 .region.alert path {
-  fill: #b14e45;
+  fill: $primary-color;
 }
 .region text {
-  fill: #b14e45;
-  stroke: #ffffff;
+  fill: $primary-color;
+  stroke: $background-color;
   stroke-width: 0.1;
-  font-family: Roboto Slab;
   font-size: 20;
   letter-spacing: 0;
 }
