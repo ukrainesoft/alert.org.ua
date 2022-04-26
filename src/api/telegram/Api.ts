@@ -1,8 +1,13 @@
 import { Status } from "../../types/Status";
 
 // TODO Get class with interface
-const API_URL = "https://api.alert.org.ua";
-const GET_LAST_X_PAGES = 2;
+const API_URL = process.env.VUE_APP_TELEGRAM_API_URL;
+const GET_LAST_X_PAGES = parseInt(
+  process.env.VUE_APP_TELEGRAM_API_PARSE_PAGES || ""
+);
+type RegionId = string;
+const MESSAGE_WITH_WARNING_PATTERN = "F09F9FA1";
+const MESSAGE_WITH_ALERT_PATTERN = "F09F94B4";
 
 function sendRequest(url: string) {
   return fetch(url);
@@ -19,8 +24,8 @@ function* getMessagesTexts(response: string): Generator<string> {
   }
 }
 
-export async function getStatuses(): Promise<Record<string, Status>> {
-  const list: Record<string, Status> = {};
+export async function getStatuses(): Promise<Record<RegionId, Status>> {
+  const list: Record<RegionId, Status> = {};
   const slugs = ["/"];
   for (let i = 0; i < slugs.length; ++i) {
     const slug = slugs[i];
@@ -38,9 +43,9 @@ export async function getStatuses(): Promise<Record<string, Status>> {
     for (const message of [...messagesFromApi].reverse()) {
       const links = [...message.matchAll(/<a.+>(.+)<\/a>/gm)];
       let status = Status.OK;
-      if (message.match("F09F9FA1")) {
+      if (message.match(MESSAGE_WITH_WARNING_PATTERN)) {
         status = Status.WARNING;
-      } else if (message.match("F09F94B4")) {
+      } else if (message.match(MESSAGE_WITH_ALERT_PATTERN)) {
         status = Status.ALERT;
       }
       if (

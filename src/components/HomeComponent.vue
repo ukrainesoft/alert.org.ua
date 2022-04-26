@@ -2,18 +2,14 @@
   <div class="ukraine-map">
     <SvgUkraineMap :regions="regions" />
   </div>
-  <div class="timer">
-    <small @click="refreshRegions"> ↻ {{ secondsBeforeNextUpdate }}</small>
-  </div>
-  <div class="creds">
-    <small v-html="credentials"></small>
-  </div>
+  <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import SvgUkraineMap from "./svg/UkraineMap.vue";
 import { RegionRepository } from "../repository/RegionRepository";
+import CoundownComponent from "./CoundownComponent.vue";
 import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatusService";
 import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
@@ -25,8 +21,6 @@ const META_OG_CONFIG = {
   "og:url": "https://alert.org.ua/",
   "og:image": "https://alert.org.ua/ukraine.svg",
 };
-const RERENDER_INTERVAL_SEC = 1;
-const REFRESH_INTERVAL_SEC = 30;
 
 const getInDangerTitle = (regions: Region[]) =>
   regions.length > 0
@@ -54,36 +48,25 @@ const loadRegions = async () => {
   return regions;
 };
 
+// TODO Move titles to the i18n level
 const getOgImage = (regions: Region[]) =>
   META_OG_CONFIG["og:image"] +
   "?" +
   regions.map((region: Region) => region.title).join(",");
 
 export default defineComponent({
-  components: { SvgUkraineMap },
+  components: { SvgUkraineMap, CoundownComponent },
   async mounted() {
     this.regions = await loadRegions();
-    this.timer = setInterval(async () => {
-      this.secondsBeforeNextUpdate -= RERENDER_INTERVAL_SEC;
-      if (this.secondsBeforeNextUpdate < 1) {
-        await this.refreshRegions();
-      }
-    }, RERENDER_INTERVAL_SEC * 1000);
   },
   methods: {
     async refreshRegions() {
       this.regions = await loadRegions();
-      this.secondsBeforeNextUpdate = REFRESH_INTERVAL_SEC;
     },
   },
   data() {
     return {
       regions: [] as Region[],
-      interval: REFRESH_INTERVAL_SEC,
-      secondsBeforeNextUpdate: REFRESH_INTERVAL_SEC,
-      lastUpdate: 10000,
-      timer: null as any,
-      credentials: process.env.VUE_APP_CREDENTIALS,
     };
   },
   metaInfo() {
@@ -107,9 +90,6 @@ export default defineComponent({
       ],
     };
   },
-  beforeUnmount() {
-    clearInterval(this.timer);
-  },
 });
 </script>
 
@@ -125,17 +105,5 @@ export default defineComponent({
   height: 100%;
   max-width: 100vw;
   max-height: 90vh;
-}
-.creds {
-  bottom: 1vh;
-  right: 5vh;
-  position: absolute;
-  text-align: right;
-}
-.timer {
-  bottom: 1vh;
-  left: 5vh;
-  position: absolute;
-  cursor: pointer;
 }
 </style>
