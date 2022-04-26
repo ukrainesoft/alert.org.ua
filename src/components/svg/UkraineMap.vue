@@ -5,6 +5,7 @@
         v-for="region in svgRegions"
         :key="region.id"
         :region="region"
+        :cssClass="getClass(region)"
       />
     </g>
   </svg>
@@ -18,11 +19,8 @@ import { SvgRegion } from "@/types/SvgRegion";
 import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
 
-// TODO use color schemas
-const COLOR_FILL_DEFAULT = "#f3d2d1";
-const COLOR_FILL_ALERT = "#b14e45";
-const svgRegions: SvgRegion[] = new SvgRegionRepository().getAll();
-
+const REGION_CLASS_ALERT = "alert";
+const REGION_CLASS_OK = "ok";
 export default defineComponent({
   name: "UkraineSvgMap",
   components: { RegionComponent },
@@ -32,28 +30,20 @@ export default defineComponent({
       required: true,
     },
   },
-  computed: {
-    svgRegions() {
-      svgRegions.forEach((svgRegion) => {
-        const region = this.regions.find(
-          (region) => region.id === svgRegion.id
-        );
-        if (region) {
-          svgRegion.title = region.title;
-          svgRegion.fill =
-            region.status === Status.ALERT
-              ? COLOR_FILL_ALERT
-              : COLOR_FILL_DEFAULT;
-          svgRegion.textFill =
-            region.status === Status.ALERT
-              ? COLOR_FILL_DEFAULT
-              : COLOR_FILL_ALERT;
-          svgRegion.title = region.title;
-        }
-      });
-
-      // A crutch to render a new state (new pointers)
-      return JSON.parse(JSON.stringify(svgRegions));
+  data() {
+    return {
+      svgRegions: new SvgRegionRepository().getAll(),
+    };
+  },
+  methods: {
+    getClass(svgRegion: SvgRegion): string {
+      const regionStatus = this.regions.find(
+        (region) => svgRegion.id === region.id
+      );
+      if (regionStatus?.status === Status.ALERT) {
+        return REGION_CLASS_ALERT;
+      }
+      return REGION_CLASS_OK;
     },
   },
 });
