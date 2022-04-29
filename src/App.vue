@@ -3,6 +3,7 @@
   <HomeComponent />
   <CredentialsComponent />
   <ThemeSwitcher />
+  <ShareButtons />
 </template>
 
 <script lang="ts">
@@ -10,6 +11,7 @@ import { defineComponent } from "vue";
 import CredentialsComponent from "./components/CredentialsComponent.vue";
 import ThemeSwitcher from "./components/ThemeSwitcher.vue";
 import HomeComponent from "./components/HomeComponent.vue";
+import ShareButtons from "./components/ShareButtons.vue";
 
 export default defineComponent({
   name: "App",
@@ -17,6 +19,7 @@ export default defineComponent({
     HomeComponent,
     CredentialsComponent,
     ThemeSwitcher,
+    ShareButtons,
   },
 });
 </script>
