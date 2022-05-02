@@ -1,5 +1,5 @@
 export class SvgRegion {
-  id?: string;
+  id!: string;
   title?: string;
   titleX?: number;
   titleY?: number;

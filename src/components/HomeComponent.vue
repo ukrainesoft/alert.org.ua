@@ -1,6 +1,6 @@
 <template>
   <div class="ukraine-map">
-    <SvgUkraineMap :regions="regions" />
+    <SvgUkraineMap :regionStatuses="regionStatuses" />
   </div>
   <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
 </template>
@@ -13,6 +13,7 @@ import CoundownComponent from "./CoundownComponent.vue";
 import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatusService";
 import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
+import { RegionStatus } from "@/types/RegionStatus";
 
 // TODO Move to the config file
 const META_OG_CONFIG = {
@@ -22,56 +23,64 @@ const META_OG_CONFIG = {
   "og:image": "https://alert.org.ua/ukraine.svg",
 };
 
-const getInDangerTitle = (regions: Region[]) =>
-  regions.length > 0
+const getInDangerTitle = (regionStatuses: RegionStatus[]) =>
+  regionStatuses.length > 0
     ? `❗${
-        regions.length === 1
-          ? regions[0].title
-          : regions.length + " regions are"
+        regionStatuses.length === 1
+          ? regionStatuses[0].region.id
+          : regionStatuses.length + " regionStatuses are"
       }   in danger right now`
-    : `💛 💙 Looks like all regions are safe`;
+    : `💛 💙 Looks like all regionStatuses are safe`;
 
-const getInDangerDescription = (regions: Region[]) => {
-  let regionsList = regions.map((region: Region) => region.title).join(", ");
-  return regions.length > 0
+const getInDangerDescription = (regionStatuses: RegionStatus[]) => {
+  let regionsList = regionStatuses
+    .map((regionStatus: RegionStatus) => regionStatus.region.id)
+    .join(", ");
+  return regionStatuses.length > 0
     ? `❗❗ ${regionsList} are in a danger right now`
-    : `💛 💙  Looks like all regions are safe`;
+    : `💛 💙  Looks like all regionStatuses are safe`;
 };
 
-const loadRegions = async () => {
+const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
-  let regions: Region[] = [];
+  let regionStatuses: RegionStatus[] = [];
   for (let region of new RegionRepository().getAll()) {
-    region.status = await statusService.getStatus(region);
-    regions.push(region);
+    try {
+      regionStatuses.push(await statusService.getRegionStatus(region.id));
+    } catch (e) {
+      console.log(region.id, " is absent in the Telegram feed");
+      regionStatuses.push(new RegionStatus(region, Status.OK));
+    }
   }
-  return regions;
+  return regionStatuses;
 };
 
 // TODO Move titles to the i18n level
-const getOgImage = (regions: Region[]) =>
+const getOgImage = (regionStatuses: RegionStatus[]) =>
   META_OG_CONFIG["og:image"] +
   "?" +
-  regions.map((region: Region) => region.title).join(",");
+  regionStatuses
+    .map((regionStatus: RegionStatus) => regionStatus.region.id)
+    .join(",");
 
 export default defineComponent({
   components: { SvgUkraineMap, CoundownComponent },
   async mounted() {
-    this.regions = await loadRegions();
+    this.regionStatuses = await loadRegionsStatuses();
   },
   methods: {
     async refreshRegions() {
-      this.regions = await loadRegions();
+      this.regionStatuses = await loadRegionsStatuses();
     },
   },
   data() {
     return {
-      regions: [] as Region[],
+      regionStatuses: [] as RegionStatus[],
     };
   },
   metaInfo() {
-    const regionsInADanger = this.regions.filter(
-      (region: Region) => region.status === Status.ALERT
+    const regionsInADanger = this.regionStatuses.filter(
+      (regionStatus: RegionStatus) => regionStatus.status === Status.ALERT
     );
     const title = getInDangerTitle(regionsInADanger);
 

@@ -1,7 +1,4 @@
-import { Status } from "./Status";
-
+export type RegionId = string;
 export class Region {
-  public id!: string;
-  public title?: string;
-  public status: Status = Status.OK;
+  constructor(public id: RegionId) {}
 }

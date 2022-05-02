@@ -6,6 +6,7 @@
         :key="region.id"
         :region="region"
         :cssClass="getClass(region)"
+        @click="onRegionClick(region)"
       />
     </g>
   </svg>
@@ -16,17 +17,17 @@ import { defineComponent, PropType } from "vue";
 import { SvgRegionRepository } from "@/repository/SvgRegionRepository";
 import RegionComponent from "./RegionComponent.vue";
 import { SvgRegion } from "@/types/SvgRegion";
-import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
+import { RegionStatus } from "@/types/RegionStatus";
+import { RegionId } from "@/types/Region";
 
 const REGION_CLASS_ALERT = "alert";
 const REGION_CLASS_OK = "ok";
 export default defineComponent({
-  name: "UkraineSvgMap",
   components: { RegionComponent },
   props: {
-    regions: {
-      type: Array as PropType<Region[]>,
+    regionStatuses: {
+      type: Array as PropType<RegionStatus[]>,
       required: true,
     },
   },
@@ -37,13 +38,19 @@ export default defineComponent({
   },
   methods: {
     getClass(svgRegion: SvgRegion): string {
-      const regionStatus = this.regions.find(
-        (region) => svgRegion.id === region.id
-      );
+      const regionStatus = this.getRegionStatus(svgRegion.id);
       if (regionStatus?.status === Status.ALERT) {
         return REGION_CLASS_ALERT;
       }
       return REGION_CLASS_OK;
+    },
+    onRegionClick(svgRegion: SvgRegion) {
+      alert(this.getRegionStatus(svgRegion.id));
+    },
+    getRegionStatus(id: RegionId): RegionStatus | undefined {
+      return this.regionStatuses.find(
+        (regionStatus) => regionStatus.region.id === id
+      );
     },
   },
 });
