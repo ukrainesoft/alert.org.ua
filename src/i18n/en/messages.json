@@ -1,0 +1,7 @@
+{
+  "meta_title_safe": "💛💙 Looks like all regions are safe",
+  "meta_title_alert_singular": "{title} is in danger right now",
+  "meta_title_alert_plural": "{count} regions are in danger right now",
+  "meta_description_alert": "❗❗ ${regionsList} are in a danger right now",
+  "meta_description_safe": "💛💙  Looks like all regions are safe"
+}

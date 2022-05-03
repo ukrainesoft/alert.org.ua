@@ -35,7 +35,6 @@ function* getMessagesTexts(response: string): Generator<MessageDTO> {
       yield parseMessage(msg as HTMLElement);
     } catch {
       // ignore
-      console.log("Error parsing message", msg);
     }
   }
 }

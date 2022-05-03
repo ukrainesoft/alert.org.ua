@@ -1,0 +1,7 @@
+{
+  "meta_title_safe": "💛💙 Схоже, Україна зараз у безпеці",
+  "meta_title_alert_singular": "{title}: лунає тривога",
+  "meta_title_alert_plural": "У {count} областях зараз лунає повітряна тривога",
+  "meta_description_alert": "❗❗ ${regionsList} зараз у небезпеці",
+  "meta_description_safe": "💛💙  Схоже, Україна зараз у безпеці"
+}
