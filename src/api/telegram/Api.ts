@@ -1,32 +1,70 @@
-import { Status } from "../../types/Status";
+import { MessageDTO, RegionName, StatusName } from "./MessageDTO";
 
-// TODO Get class with interface
 const API_URL = process.env.VUE_APP_TELEGRAM_API_URL;
 const GET_LAST_X_PAGES = parseInt(
   process.env.VUE_APP_TELEGRAM_API_PARSE_PAGES || ""
 );
-type RegionId = string;
-const MESSAGE_WITH_WARNING_PATTERN = "F09F9FA1";
-const MESSAGE_WITH_ALERT_PATTERN = "F09F94B4";
+
+const MESSAGE_DATETIME_PATTERN =
+  /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})/gm;
+const MESSAGE_TITLE_PATTERN = /<a.+>#(.+)<\/a>/gm;
+const MESSAGES_PREV_LINK_PATTERN = /\?before=\d+/gm;
 
 function sendRequest(url: string) {
   return fetch(url);
 }
 
-function* getMessagesTexts(response: string): Generator<string> {
+function* getMessagesTexts(response: string): Generator<MessageDTO> {
   const div = document.createElement("div");
   div.innerHTML = response;
-  const messages = div.getElementsByClassName("js-message_text");
+  const messages = div.getElementsByClassName("tgme_widget_message_bubble");
   for (const msg of messages) {
-    const message = (msg as HTMLElement).innerHTML;
-
-    yield message;
+    try {
+      yield parseMessage(msg as HTMLElement);
+    } catch {
+      // ignore
+    }
   }
 }
 
-export async function getStatuses(): Promise<Record<RegionId, Status>> {
-  const list: Record<RegionId, Status> = {};
+function parseDatetime(message: string): Date {
+  const datetime = [...message.matchAll(MESSAGE_DATETIME_PATTERN)];
+  if (!datetime) {
+    throw new DatetimeError("Datetime not found");
+  }
+  return new Date(datetime[0][1]);
+}
+
+function parseStatus(message: string): StatusName {
+  if (message.indexOf(StatusName.ALERT) !== -1) {
+    return StatusName.ALERT;
+  }
+  return StatusName.OK;
+}
+
+function parseMessage(el: HTMLElement): MessageDTO {
+  const title = parseRegionTitle(el.innerHTML);
+  const statusName = parseStatus(el.innerHTML);
+
+  const datetime = parseDatetime(
+    el.getElementsByClassName("tgme_widget_message_date")[0].innerHTML
+  );
+
+  return new MessageDTO(title, statusName, datetime);
+}
+
+function parseRegionTitle(message: string): RegionName {
+  const links = [...message.matchAll(MESSAGE_TITLE_PATTERN)];
+  if (links && links[0] && links[0][1]) {
+    return links[0][1];
+  }
+  throw new RegionTitleError("Region title not found");
+}
+
+export async function getMessages(): Promise<MessageDTO[]> {
+  const list: Record<RegionName, MessageDTO> = {};
   const slugs = ["/"];
+  const messagesFromApi = [];
   for (let i = 0; i < slugs.length; ++i) {
     const slug = slugs[i];
 
@@ -34,30 +72,22 @@ export async function getStatuses(): Promise<Record<RegionId, Status>> {
     const responseText = await response.text();
 
     if (slugs.length < GET_LAST_X_PAGES) {
-      const newLink = responseText.match(/\?before=\d+/gm);
+      const newLink = responseText.match(MESSAGES_PREV_LINK_PATTERN);
       if (newLink && newLink[0]) {
         slugs.push(newLink[0]);
       }
     }
-    const messagesFromApi = getMessagesTexts(responseText);
-    for (const message of [...messagesFromApi].reverse()) {
-      const links = [...message.matchAll(/<a.+>(.+)<\/a>/gm)];
-      let status = Status.OK;
-      if (message.match(MESSAGE_WITH_WARNING_PATTERN)) {
-        status = Status.WARNING;
-      } else if (message.match(MESSAGE_WITH_ALERT_PATTERN)) {
-        status = Status.ALERT;
-      }
-      if (
-        links &&
-        links[0] &&
-        links[0][1] &&
-        typeof list[links[0][1]] === "undefined"
-      ) {
-        list[links[0][1]] = status;
-      }
+
+    messagesFromApi.unshift(getMessagesTexts(responseText));
+  }
+  for (const messageFromApi of messagesFromApi) {
+    for (const message of [...messageFromApi]) {
+      list[message.regionName] = message;
     }
   }
 
-  return list;
+  return Object.values(list);
 }
+
+class DatetimeError extends Error {}
+class RegionTitleError extends Error {}

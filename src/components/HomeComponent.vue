@@ -1,7 +1,15 @@
 <template>
   <div class="ukraine-map">
-    <SvgUkraineMap :regions="regions" />
+    <SvgUkraineMap
+      :regionStatuses="regionStatuses"
+      @region-click="getRegionInfo"
+    />
   </div>
+  <RegionInfoComponent
+    :regionInfo="selectedRegionInfo"
+    @close="selectedRegionInfo = undefined"
+    v-if="selectedRegionInfo"
+  />
   <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
 </template>
 
@@ -10,85 +18,59 @@ import { defineComponent } from "@vue/runtime-core";
 import SvgUkraineMap from "./svg/UkraineMap.vue";
 import { RegionRepository } from "../repository/RegionRepository";
 import CoundownComponent from "./CoundownComponent.vue";
+import RegionInfoComponent from "./RegionInfoComponent.vue";
 import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatusService";
-import { Region } from "@/types/Region";
 import { Status } from "@/types/Status";
+import { RegionStatus } from "@/types/RegionStatus";
+import { getTranslatedMetaInfo } from "./utils/metaInfo";
+import { SvgRegion } from "@/types/SvgRegion";
+import { RegionInfo } from "@/types/RegionInfo";
 
-// TODO Move to the config file
-const META_OG_CONFIG = {
-  "og:site_name": "Alert.Org.Ua",
-  "og:type": "website",
-  "og:url": "https://alert.org.ua/",
-  "og:image": "https://alert.org.ua/ukraine.svg",
-};
-
-const getInDangerTitle = (regions: Region[]) =>
-  regions.length > 0
-    ? `❗${
-        regions.length === 1
-          ? regions[0].title
-          : regions.length + " regions are"
-      }   in danger right now`
-    : `💛 💙 Looks like all regions are safe`;
-
-const getInDangerDescription = (regions: Region[]) => {
-  let regionsList = regions.map((region: Region) => region.title).join(", ");
-  return regions.length > 0
-    ? `❗❗ ${regionsList} are in a danger right now`
-    : `💛 💙  Looks like all regions are safe`;
-};
-
-const loadRegions = async () => {
+const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
-  let regions: Region[] = [];
-  for (let region of new RegionRepository().getAll()) {
-    region.status = await statusService.getStatus(region);
-    regions.push(region);
+  let regionStatuses: RegionStatus[] = [];
+  for (let regionId of new RegionRepository().getAll()) {
+    try {
+      regionStatuses.push(await statusService.getRegionStatus(regionId));
+    } catch (e) {
+      regionStatuses.push(new RegionStatus(regionId, Status.OK));
+    }
   }
-  return regions;
+  return regionStatuses;
 };
-
-// TODO Move titles to the i18n level
-const getOgImage = (regions: Region[]) =>
-  META_OG_CONFIG["og:image"] +
-  "?" +
-  regions.map((region: Region) => region.title).join(",");
 
 export default defineComponent({
-  components: { SvgUkraineMap, CoundownComponent },
+  components: { SvgUkraineMap, CoundownComponent, RegionInfoComponent },
   async mounted() {
-    this.regions = await loadRegions();
+    this.regionStatuses = await loadRegionsStatuses();
   },
   methods: {
     async refreshRegions() {
-      this.regions = await loadRegions();
+      this.regionStatuses = await loadRegionsStatuses();
+    },
+    getRegionInfo(svgRegion?: SvgRegion) {
+      const regionStatus = this.regionStatuses.find(
+        (regionStatus) => regionStatus.regionId === svgRegion?.id
+      );
+      if (regionStatus) {
+        this.selectedRegionInfo = new RegionInfo(
+          regionStatus.regionId,
+          regionStatus
+        );
+      } else {
+        this.selectedRegionInfo = undefined;
+      }
     },
   },
   data() {
     return {
-      regions: [] as Region[],
+      regionStatuses: [] as RegionStatus[],
+      selectedRegionInfo: undefined as RegionInfo | undefined,
     };
   },
+  // Used by vue-meta plugin
   metaInfo() {
-    const regionsInADanger = this.regions.filter(
-      (region: Region) => region.status === Status.ALERT
-    );
-    const title = getInDangerTitle(regionsInADanger);
-
-    return {
-      title,
-      meta: [
-        { property: "og:title", content: title },
-        {
-          property: "og:image",
-          content: getOgImage(regionsInADanger),
-        },
-        {
-          property: "og:description",
-          content: getInDangerDescription(regionsInADanger),
-        },
-      ],
-    };
+    return getTranslatedMetaInfo(this.regionStatuses);
   },
 });
 </script>

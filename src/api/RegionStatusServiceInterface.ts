@@ -1,6 +1,6 @@
-import { Region } from "@/types/Region";
-import { Status } from "../types/Status";
+import { RegionId } from "@/types/Region";
+import { RegionStatus } from "@/types/RegionStatus";
 
 export interface RegionStatusServiceInterface {
-  getStatus(region: Region): Promise<Status>;
+  getRegionStatus(regionId: RegionId): Promise<RegionStatus>;
 }

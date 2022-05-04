@@ -1,0 +1,12 @@
+{
+  "meta_title_safe": "💛💙 Looks like all regions are safe",
+  "meta_title_alert_singular": "{title} is in danger right now",
+  "meta_title_alert_plural": "{count} regions are in danger right now",
+  "meta_description_alert": "❗❗ ${regionsList} are in a danger right now",
+  "meta_description_safe": "💛💙  Looks like all regions are safe",
+  "region_info_region_status_0": "There is no alert in {region} region",
+  "region_info_region_status_1": "{region} region is in danger",
+  "region_info_days": "0 | {n} day | {n} days",
+  "region_info_hours": "0 | {n} hour | {n} hours",
+  "region_info_minutes": "0 | {n} minute | {n} minutes"
+}

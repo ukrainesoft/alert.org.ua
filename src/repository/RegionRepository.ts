@@ -1,13 +1,8 @@
-import { Region } from "@/types/Region";
-import { Status } from "@/types/Status";
+import { RegionId } from "@/types/Region";
 import { BaseRepository } from "./BaseRepository";
 
-export class RegionRepository extends BaseRepository<Region> {
-  protected createRegionFromData(data: { id: string; title: string }): Region {
-    const region = new Region();
-    region.id = data.id;
-    region.title = data.title;
-    region.status = Status.OK;
-    return region;
+export class RegionRepository extends BaseRepository<RegionId> {
+  protected createFromData(data: { id: string }): RegionId {
+    return data.id;
   }
 }
