@@ -1,26 +1,14 @@
+import { MessageDTO, RegionName, StatusName } from "./MessageDTO";
+
 const API_URL = process.env.VUE_APP_TELEGRAM_API_URL;
 const GET_LAST_X_PAGES = parseInt(
   process.env.VUE_APP_TELEGRAM_API_PARSE_PAGES || ""
 );
 
-type RegionName = string;
-
-export enum StatusName {
-  OK = "Відбій",
-  ALERT = "Повітряна тривога",
-}
-
 const MESSAGE_DATETIME_PATTERN =
   /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})/gm;
 const MESSAGE_TITLE_PATTERN = /<a.+>#(.+)<\/a>/gm;
 const MESSAGES_PREV_LINK_PATTERN = /\?before=\d+/gm;
-export class MessageDTO {
-  constructor(
-    public regionName: RegionName,
-    public statusName: StatusName,
-    public datetime: Date
-  ) {}
-}
 
 function sendRequest(url: string) {
   return fetch(url);

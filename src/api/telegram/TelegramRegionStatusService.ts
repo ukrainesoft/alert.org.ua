@@ -1,9 +1,10 @@
 import { RegionsMap } from "./RegionsMap";
 import { RegionStatusServiceInterface } from "../RegionStatusServiceInterface";
 import { RegionStatus } from "@/types/RegionStatus";
-import { getMessages, StatusName } from "./Api";
+import { getMessages } from "./Api";
 import { Status } from "@/types/Status";
 import { Region, RegionId } from "@/types/Region";
+import { StatusName } from "./MessageDTO";
 
 export class TelegramRegionStatusService
   implements RegionStatusServiceInterface
@@ -19,13 +20,12 @@ export class TelegramRegionStatusService
       Object.values(TelegramRegionStatusService.regionStatuses).length === 0
     ) {
       const messages = await getMessages();
-      console.log(messages);
-
       for (const message of messages) {
         const id = RegionsMap[message.regionName];
         TelegramRegionStatusService.regionStatuses[id] = new RegionStatus(
           new Region(id),
-          this.parseStatus(message.statusName)
+          this.parseStatus(message.statusName),
+          message.datetime
         );
       }
     }

@@ -6,7 +6,7 @@
         :key="region.id"
         :region="region"
         :cssClass="getClass(region)"
-        @click="onRegionClick(region)"
+        @click="$emit('region-click', region)"
       />
     </g>
   </svg>
@@ -24,6 +24,7 @@ import { RegionId } from "@/types/Region";
 const REGION_CLASS_ALERT = "alert";
 const REGION_CLASS_OK = "ok";
 export default defineComponent({
+  emits: ["region-click"],
   components: { RegionComponent },
   props: {
     regionStatuses: {
@@ -43,9 +44,6 @@ export default defineComponent({
         return REGION_CLASS_ALERT;
       }
       return REGION_CLASS_OK;
-    },
-    onRegionClick(svgRegion: SvgRegion) {
-      alert(this.getRegionStatus(svgRegion.id));
     },
     getRegionStatus(id: RegionId): RegionStatus | undefined {
       return this.regionStatuses.find(

@@ -1,7 +1,15 @@
 <template>
   <div class="ukraine-map">
-    <SvgUkraineMap :regionStatuses="regionStatuses" />
+    <SvgUkraineMap
+      :regionStatuses="regionStatuses"
+      @region-click="getRegionInfo"
+    />
   </div>
+  <RegionInfoComponent
+    :regionInfo="selectedRegionInfo"
+    @close="selectedRegionInfo = undefined"
+    v-if="selectedRegionInfo"
+  />
   <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
 </template>
 
@@ -10,10 +18,13 @@ import { defineComponent } from "@vue/runtime-core";
 import SvgUkraineMap from "./svg/UkraineMap.vue";
 import { RegionRepository } from "../repository/RegionRepository";
 import CoundownComponent from "./CoundownComponent.vue";
+import RegionInfoComponent from "./RegionInfoComponent.vue";
 import { TelegramRegionStatusService } from "../api/telegram/TelegramRegionStatusService";
 import { Status } from "@/types/Status";
 import { RegionStatus } from "@/types/RegionStatus";
 import { getTranslatedMetaInfo } from "./utils/metaInfo";
+import { SvgRegion } from "@/types/SvgRegion";
+import { RegionInfo } from "@/types/RegionInfo";
 
 const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
@@ -30,7 +41,7 @@ const loadRegionsStatuses = async () => {
 };
 
 export default defineComponent({
-  components: { SvgUkraineMap, CoundownComponent },
+  components: { SvgUkraineMap, CoundownComponent, RegionInfoComponent },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
   },
@@ -38,10 +49,24 @@ export default defineComponent({
     async refreshRegions() {
       this.regionStatuses = await loadRegionsStatuses();
     },
+    getRegionInfo(svgRegion?: SvgRegion) {
+      const regionStatus = this.regionStatuses.find(
+        (regionStatus) => regionStatus.region.id === svgRegion?.id
+      );
+      if (regionStatus) {
+        this.selectedRegionInfo = new RegionInfo(
+          regionStatus.region.id,
+          regionStatus
+        );
+      } else {
+        this.selectedRegionInfo = undefined;
+      }
+    },
   },
   data() {
     return {
       regionStatuses: [] as RegionStatus[],
+      selectedRegionInfo: undefined as RegionInfo | undefined,
     };
   },
   // Used by vue-meta plugin

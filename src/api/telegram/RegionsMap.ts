@@ -9,7 +9,7 @@ export const RegionsMap: Record<string, string> = {
   Полтавська_область: "poltava",
   Сумська_область: "sumy",
   Львівська_область: "lviv",
-  Одеська_область: "odessa",
+  Одеська_область: "odesa",
   Житомирська_область: "zhytomyr",
   Херсонська_область: "kherson",
   Луганська_область: "luhansk",

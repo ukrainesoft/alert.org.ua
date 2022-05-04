@@ -3,5 +3,10 @@
   "meta_title_alert_singular": "{title}: лунає тривога",
   "meta_title_alert_plural": "У {count} областях зараз лунає повітряна тривога",
   "meta_description_alert": "❗❗ ${regionsList} зараз у небезпеці",
-  "meta_description_safe": "💛💙  Схоже, Україна зараз у безпеці"
+  "meta_description_safe": "💛💙  Схоже, Україна зараз у безпеці",
+  "region_info_region_status_0": "{region} у безпеці",
+  "region_info_region_status_1": "{region} у небезпеці",
+  "region_info_days": "0 | {n} день | {n} дня | {n} днів",
+  "region_info_hours": "0 | {n} годину | {n} години | {n} годин",
+  "region_info_minutes": "0 | {n} хвилину | {n} хвилини | {n} хвилин"
 }
