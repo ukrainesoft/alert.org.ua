@@ -61,7 +61,7 @@ span {
 .popup {
   margin: 40vh auto;
   padding: 20px;
-  background: #fff;
+  background: var(--background-color);
   border-radius: 5px;
   width: 30%;
   top: 0;
@@ -74,6 +74,10 @@ span {
   transition: all 0.5s ease-in-out;
   border: 1px solid #cbcbcb;
   font-size: 18px;
+}
+
+.dark .popup {
+  background: var(--background-dark-color);
 }
 
 .popup .close {

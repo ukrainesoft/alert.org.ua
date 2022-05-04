@@ -25,34 +25,35 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-$primary-color: #b14e45;
-$secondary-color: #f3d2d1;
-$background-color: #fff6f6;
+:root {
+  --primary-color: #b14e45;
+  --secondary-color: #f3d2d1;
+  --background-color: #fff6f6;
 
-$primary-dark-color: #b14e45;
-$secondary-dark-color: #8a8a8a;
-$background-dark-color: #21262e;
-
+  --primary-dark-color: #b14e45;
+  --secondary-dark-color: #8a8a8a;
+  --background-dark-color: #21262e;
+}
 html,
 body {
   height: 100%;
   margin: 0;
-  background-color: $background-color;
+  background-color: var(--background-color);
   color: #2c3e50;
   font-family: Roboto Slab;
 }
 body.dark {
-  background-color: $background-dark-color;
-  color: $background-color;
+  background-color: var(--background-dark-color);
+  color: var(--background-color);
   a {
-    color: $primary-dark-color;
+    color: var(--primary-dark-color);
   }
   .region path {
-    fill: $secondary-dark-color;
-    stroke: $background-dark-color;
+    fill: var(--secondary-dark-color);
+    stroke: var(--background-dark-color);
   }
   .region.alert path {
-    fill: $primary-dark-color;
+    fill: var(--primary-dark-color);
   }
 }
 #app {
@@ -62,19 +63,19 @@ body.dark {
   padding: 5px;
 }
 .region path {
-  fill: $secondary-color;
+  fill: var(--secondary-color);
   stroke-width: 1;
-  stroke: $background-color;
+  stroke: var(--background-color);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .region.alert path {
-  fill: $primary-color;
+  fill: var(--primary-color);
 }
 .region text {
-  fill: $primary-color;
-  stroke: $background-color;
+  fill: var(--primary-color);
+  stroke: var(--background-color);
   stroke-width: 0.1;
   font-size: 20;
   letter-spacing: 0;
