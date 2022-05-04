@@ -1,8 +1,8 @@
-import { Region } from "@/types/Region";
+import { RegionId } from "@/types/Region";
 import { BaseRepository } from "./BaseRepository";
 
-export class RegionRepository extends BaseRepository<Region> {
-  protected createRegionFromData(data: { id: string }): Region {
-    return new Region(data.id);
+export class RegionRepository extends BaseRepository<RegionId> {
+  protected createFromData(data: { id: string }): RegionId {
+    return data.id;
   }
 }

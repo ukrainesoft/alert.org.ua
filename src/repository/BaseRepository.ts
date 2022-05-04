@@ -11,7 +11,7 @@ export abstract class BaseRepository<T> {
       if (key && region[key] !== value) {
         return;
       }
-      regions.push(this.createRegionFromData(region));
+      regions.push(this.createFromData(region));
     });
     return regions;
   }
@@ -20,13 +20,13 @@ export abstract class BaseRepository<T> {
     const list: T[] = [];
     for (const region of regionsData) {
       if (ids.indexOf(region.id) !== -1) {
-        list.push(this.createRegionFromData(region));
+        list.push(this.createFromData(region));
       }
     }
     return list;
   }
 
-  protected createRegionFromData(data: any): T {
+  protected createFromData(data: any): T {
     return data as T;
   }
 }

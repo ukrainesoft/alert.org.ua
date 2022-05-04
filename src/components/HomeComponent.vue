@@ -29,12 +29,11 @@ import { RegionInfo } from "@/types/RegionInfo";
 const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
   let regionStatuses: RegionStatus[] = [];
-  for (let region of new RegionRepository().getAll()) {
+  for (let regionId of new RegionRepository().getAll()) {
     try {
-      regionStatuses.push(await statusService.getRegionStatus(region.id));
+      regionStatuses.push(await statusService.getRegionStatus(regionId));
     } catch (e) {
-      console.debug(region.id, " is absent in the Telegram feed");
-      regionStatuses.push(new RegionStatus(region, Status.OK));
+      regionStatuses.push(new RegionStatus(regionId, Status.OK));
     }
   }
   return regionStatuses;
@@ -51,11 +50,11 @@ export default defineComponent({
     },
     getRegionInfo(svgRegion?: SvgRegion) {
       const regionStatus = this.regionStatuses.find(
-        (regionStatus) => regionStatus.region.id === svgRegion?.id
+        (regionStatus) => regionStatus.regionId === svgRegion?.id
       );
       if (regionStatus) {
         this.selectedRegionInfo = new RegionInfo(
-          regionStatus.region.id,
+          regionStatus.regionId,
           regionStatus
         );
       } else {

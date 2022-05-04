@@ -47,7 +47,7 @@ export default defineComponent({
     },
     getRegionStatus(id: RegionId): RegionStatus | undefined {
       return this.regionStatuses.find(
-        (regionStatus) => regionStatus.region.id === id
+        (regionStatus) => regionStatus.regionId === id
       );
     },
   },

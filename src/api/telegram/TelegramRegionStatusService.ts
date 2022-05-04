@@ -3,7 +3,7 @@ import { RegionStatusServiceInterface } from "../RegionStatusServiceInterface";
 import { RegionStatus } from "@/types/RegionStatus";
 import { getMessages } from "./Api";
 import { Status } from "@/types/Status";
-import { Region, RegionId } from "@/types/Region";
+import { RegionId } from "@/types/Region";
 import { StatusName } from "./MessageDTO";
 
 export class TelegramRegionStatusService
@@ -23,7 +23,7 @@ export class TelegramRegionStatusService
       for (const message of messages) {
         const id = RegionsMap[message.regionName];
         TelegramRegionStatusService.regionStatuses[id] = new RegionStatus(
-          new Region(id),
+          id,
           this.parseStatus(message.statusName),
           message.datetime
         );

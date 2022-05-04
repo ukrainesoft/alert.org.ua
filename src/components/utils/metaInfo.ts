@@ -8,13 +8,13 @@ export function getTranslatedMetaInfo(regionStatuses: RegionStatus[]) {
     (regionStatus: RegionStatus) => regionStatus.status === Status.ALERT
   );
   const regionsInADangerList = regionsInADanger
-    .map((regionStatus: RegionStatus) => regionStatus.region.id)
+    .map((regionStatus: RegionStatus) => regionStatus.regionId)
     .join(", ");
 
   let title = t("message.meta_title_safe");
   if (regionsInADanger.length === 1) {
     title = t("message.meta_title_alert_singular", {
-      title: t("region." + regionsInADanger[0].region.id),
+      title: t("region." + regionsInADanger[0].regionId),
     });
   } else if (regionsInADanger.length > 1) {
     title = t("message.meta_title_alert_plural", {
@@ -55,5 +55,5 @@ const getOgImage = (regionStatuses: RegionStatus[]) =>
   META_OG_CONFIG["og:image"] +
   "?" +
   regionStatuses
-    .map((regionStatus: RegionStatus) => regionStatus.region.id)
+    .map((regionStatus: RegionStatus) => regionStatus.regionId)
     .join(",");

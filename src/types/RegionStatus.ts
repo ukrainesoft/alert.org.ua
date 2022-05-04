@@ -1,9 +1,9 @@
-import { Region } from "./Region";
+import { RegionId } from "./Region";
 import { Status } from "./Status";
 
 export class RegionStatus {
   public constructor(
-    public region: Region,
+    public regionId: RegionId,
     public status: Status,
     public date?: Date
   ) {}
