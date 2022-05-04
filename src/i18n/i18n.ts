@@ -16,7 +16,7 @@ const messages = {
 };
 
 function getLang() {
-  let lang =
+  const lang =
     navigator.languages != undefined
       ? navigator.languages[0]
       : navigator.language;
