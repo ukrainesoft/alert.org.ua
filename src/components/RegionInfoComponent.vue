@@ -63,7 +63,7 @@ span {
   padding: 20px;
   background: #fff;
   border-radius: 5px;
-  width: 20%;
+  width: 30%;
   top: 0;
   left: 0;
   right: 0;
@@ -81,10 +81,6 @@ span {
   font-weight: bold;
   text-decoration: none;
   cursor: pointer;
-}
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
 }
 @media screen and (max-width: 700px) {
   .popup {
