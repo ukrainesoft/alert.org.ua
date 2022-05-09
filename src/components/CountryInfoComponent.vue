@@ -44,17 +44,16 @@ function getSortedListByStatus(
 
 <style scoped>
 div.legend {
-  background: var(--background-color);
   border-radius: 5px;
   align-items: center;
   text-align: center;
   justify-content: space-between;
-  border: 1px solid #cbcbcb;
   font-size: 24px;
   bottom: 10px;
   position: absolute;
   padding: 2vh 2vw;
-  margin: 0 auto;
+  margin: 0 10% 0px auto;
+  color: var(--primary-color);
 }
 @media screen and (max-width: 650px) {
   div.legend {
