@@ -74,10 +74,10 @@ body.dark {
   fill: var(--primary-color);
 }
 .region text {
-  fill: var(--primary-color);
+  fill: var(--secondary-color);
   stroke: var(--background-color);
   stroke-width: 0.1;
-  font-size: 20;
+  font-size: 26px;
   letter-spacing: 0;
 }
 </style>

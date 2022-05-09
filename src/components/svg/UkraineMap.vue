@@ -31,11 +31,19 @@ export default defineComponent({
       type: Array as PropType<RegionStatus[]>,
       required: true,
     },
+    regionTitles: {
+      type: Object as PropType<Record<RegionId, string>>,
+      required: false,
+      default: () => ({}),
+    },
   },
-  data() {
-    return {
-      svgRegions: new SvgRegionRepository().getAll(),
-    };
+  computed: {
+    svgRegions() {
+      return new SvgRegionRepository().getAll().map((region) => {
+        region.title = this.getTitle(region);
+        return region;
+      });
+    },
   },
   methods: {
     getClass(svgRegion: SvgRegion): string {
@@ -49,6 +57,11 @@ export default defineComponent({
       return this.regionStatuses.find(
         (regionStatus) => regionStatus.regionId === id
       );
+    },
+    getTitle(svgRegion: SvgRegion): string {
+      return Object.values(this.regionTitles).length > 0
+        ? this.regionTitles[svgRegion.id] || ""
+        : svgRegion.title || "";
     },
   },
 });

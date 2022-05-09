@@ -2,8 +2,10 @@
   <div class="ukraine-map">
     <SvgUkraineMap
       :regionStatuses="regionStatuses"
+      :regionTitles="regionTitles"
       @region-click="getRegionInfo"
     />
+    <CountryInfoComponent :regionStatuses="regionStatuses" />
   </div>
   <RegionInfoComponent
     :regionInfo="selectedRegionInfo"
@@ -25,6 +27,9 @@ import { RegionStatus } from "@/types/RegionStatus";
 import { getTranslatedMetaInfo } from "./utils/metaInfo";
 import { SvgRegion } from "@/types/SvgRegion";
 import { RegionInfo } from "@/types/RegionInfo";
+import CountryInfoComponent from "./CountryInfoComponent.vue";
+import { RegionId } from "@/types/Region";
+import { getDatesDiff } from "./utils/date";
 
 const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
@@ -40,7 +45,12 @@ const loadRegionsStatuses = async () => {
 };
 
 export default defineComponent({
-  components: { SvgUkraineMap, CoundownComponent, RegionInfoComponent },
+  components: {
+    SvgUkraineMap,
+    CoundownComponent,
+    RegionInfoComponent,
+    CountryInfoComponent,
+  },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
   },
@@ -67,6 +77,27 @@ export default defineComponent({
       regionStatuses: [] as RegionStatus[],
       selectedRegionInfo: undefined as RegionInfo | undefined,
     };
+  },
+  computed: {
+    // The region title is time from the last alert or an empty string
+    regionTitles(): Record<RegionId, string> {
+      let titles: Record<RegionId, string> = {};
+      this.regionStatuses.map((regionStatus) => {
+        if (!regionStatus?.date || regionStatus.status === Status.OK) {
+          titles[regionStatus.regionId] = "";
+          return;
+        }
+
+        let dateDiff = getDatesDiff(regionStatus.date, new Date());
+        dateDiff.h = dateDiff.d * 24 + dateDiff.h;
+        let h = dateDiff.h < 10 ? "0" + dateDiff.h : dateDiff.h;
+        let m = dateDiff.m < 10 ? "0" + dateDiff.m : dateDiff.m;
+
+        titles[regionStatus.regionId] = h + ":" + m;
+      });
+
+      return titles;
+    },
   },
   // Used by vue-meta plugin
   metaInfo() {

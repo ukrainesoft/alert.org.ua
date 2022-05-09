@@ -1,13 +1,9 @@
 <template>
   <g :class="[cssClass, { region: true }]" :id="region.id">
     <path :d="region.d" />
-    <text>
-      <tspan
-        v-if="region.title && region.titleX && region.titleY"
-        :x="region.titleX"
-        :y="region.titleY"
-      >
-        <!-- {{ region.title }} -->
+    <text :font-size="region.fontSize" v-if="region.title">
+      <tspan :x="region.titleX || 0" :y="region.titleY || 0">
+        {{ region.title }}
       </tspan>
     </text>
   </g>
