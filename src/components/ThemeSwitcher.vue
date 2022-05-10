@@ -78,7 +78,7 @@ label {
   position: relative;
   height: 16px;
   width: 36px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid var(--secondary-color);
   border-radius: 10px;
   transition: background-color 250ms;
   padding: 2px;
@@ -92,14 +92,14 @@ label {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background-color: #ffeccf;
+  background-color: var(--secondary-color);
   box-shadow: inset 0px 0px 0px 0.75px #ffbb52;
   transition: background-color 250ms, border-color 250ms,
     transform 500ms cubic-bezier(0.26, 2, 0.46, 0.71);
 }
 .toggle-checkbox:checked ~ .toggle-slot .toggle-button {
   background-color: #485367;
-  box-shadow: inset 0px 0px 0px 0.75px white;
+  box-shadow: inset 0px 0px 0px 0.75px var(--secondary-color);
   transform: translate(0, 0);
 }
 .sun-icon {
@@ -125,7 +125,7 @@ label {
   position: absolute;
   height: 16px;
   width: 16px;
-  color: white;
+  color: var(--secondary-color);
 }
 .moon-icon-wrapper {
   position: absolute;

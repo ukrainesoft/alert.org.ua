@@ -118,6 +118,6 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: var(--primary-color);
+  color: var(--text-color);
 }
 </style>

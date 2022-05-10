@@ -56,7 +56,7 @@ div.legend {
   position: absolute;
   padding: 2vh 2vw;
   margin: 0 auto;
-  color: var(--primary-color);
+  color: var(--text-color);
 }
 @media screen and (max-width: 650px) {
   div.legend {

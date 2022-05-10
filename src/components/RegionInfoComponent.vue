@@ -58,9 +58,6 @@ export default defineComponent({
   border: 1px solid #cbcbcb;
   font-size: 18px;
 }
-.dark .popup {
-  background: var(--background-dark-color);
-}
 .popup .close {
   font-size: 30px;
   font-weight: bold;

@@ -24,5 +24,21 @@ export default defineComponent({
 <style scoped>
 .region path {
   transition: 0.5s fill ease;
+  fill: var(--secondary-color);
+  stroke-width: 1;
+  stroke: var(--background-color);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.region.alert path {
+  fill: var(--primary-color);
+}
+.region text {
+  fill: var(--text-color-light);
+  stroke: var(--background-color);
+  stroke-width: 0.1;
+  font-size: 26px;
+  letter-spacing: 0;
 }
 </style>
