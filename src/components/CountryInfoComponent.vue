@@ -1,8 +1,11 @@
 <template>
-  <div class="legend" v-if="sortedRegionStatusesInAlert.length > 0">
-    {{ $t("message.country_info_alert_title") }}
-  </div>
-  <div class="legend" v-else-if="sortedRegionStatusesInSafe.length > 0">
+  <div
+    class="legend"
+    v-if="
+      sortedRegionStatusesInAlert.length === 0 &&
+      sortedRegionStatusesInSafe.length > 0
+    "
+  >
     {{ $t("message.country_info_safe_title") }}
     <TimeSpan :date="sortedRegionStatusesInSafe[0].date" />
   </div>
