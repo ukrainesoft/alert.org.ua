@@ -1,27 +1,74 @@
 <template>
   <div>
-    <TwitterButton btnText="" />
-    <FacebookButton btnText="" />
-    <ViberButton btnText="" />
-    <WhatsAppButton btnText="" />
-    <TelegramButton btnText="" />
+    <Icon
+      v-for="socialNetworkIcon of socialNetworkIconsData"
+      :key="socialNetworkIcon.icon"
+      :icon="socialNetworkIcon.icon"
+      @click="navigate(socialNetworkIcon.url, socialNetworkIcon.params)"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import TwitterButton from "vue-share-buttons/src/components/TwitterButton.vue";
-import FacebookButton from "vue-share-buttons/src/components/FacebookButton.vue";
-import TelegramButton from "vue-share-buttons/src/components/TelegramButton.vue";
-import ViberButton from "vue-share-buttons/src/components/ViberButton.vue";
-import WhatsAppButton from "vue-share-buttons/src/components/WhatsAppButton.vue";
+import { Icon } from "@iconify/vue";
 
+type SocialNetworkIconData = {
+  icon: string;
+  url: string;
+  params: Record<string, string>;
+};
 export default {
-  components: {
-    TwitterButton,
-    FacebookButton,
-    TelegramButton,
-    ViberButton,
-    WhatsAppButton,
+  components: { Icon },
+  data() {
+    return {
+      socialNetworkIconsData: [
+        {
+          icon: "cib:twitter",
+          url: "https://twitter.com/share",
+          params: {
+            url: document.location.href,
+            text: document.title,
+          },
+        },
+        {
+          icon: "cib:facebook-f",
+          url: "https://www.facebook.com/sharer/sharer.php",
+          params: {
+            u: document.location.href,
+          },
+        },
+        {
+          icon: "cib:whatsapp",
+          url: "https://api.whatsapp.com/send",
+          params: {
+            text: document.location.href,
+          },
+        },
+        {
+          icon: "cib:viber",
+          url: "viber://forward",
+          params: {
+            text: document.location.href,
+          },
+        },
+        {
+          icon: "cib:telegram-plane",
+          url: "https://telegram.me/share/url",
+          params: {
+            url: document.location.href,
+          },
+        },
+      ],
+    };
+  },
+  methods: {
+    navigate(socialUrl: string, paramsObject: Record<string, string>) {
+      const params = new URLSearchParams(paramsObject).toString();
+      const url = new URL(socialUrl);
+      url.search = params;
+
+      window.open(url.toString(), "_blank");
+    },
   },
 };
 </script>
@@ -29,11 +76,17 @@ export default {
 <style scoped>
 div {
   position: absolute;
-  top: 50px;
-  right: 0px;
-  text-align: right;
-  line-height: 14px;
-  display: flex;
-  flex-direction: column;
+  top: 48px;
+  right: 20px;
+  width: 18px;
+}
+svg {
+  color: var(--secondary-color);
+  border: solid 1px var(--secondary-color);
+  padding: 3px;
+  margin: 2px;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
 }
 </style>
