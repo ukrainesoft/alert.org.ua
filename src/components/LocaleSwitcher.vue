@@ -23,8 +23,8 @@ export default defineComponent({
 .locale {
   width: 30px;
   text-align: center;
-  bottom: 50px;
-  left: 10px;
+  bottom: 10px;
+  left: 60px;
   position: absolute;
   cursor: pointer;
   color: var(--secondary-color);
