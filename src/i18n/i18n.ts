@@ -15,7 +15,7 @@ const messages = {
   },
 };
 
-function getLang() {
+function getDefaultLang() {
   const lang =
     navigator.languages != undefined
       ? navigator.languages[0]
@@ -45,7 +45,7 @@ function customRule(choice: number, choicesLength: number, orgRule: number) {
 
 export const i18n = createI18n({
   legacy: false,
-  locale: getLang(),
+  locale: getDefaultLang(),
   fallbackLocale: "en",
   pluralRules: {
     uk: customRule,
