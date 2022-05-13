@@ -13,6 +13,7 @@
     v-if="selectedRegionInfo"
   />
   <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
+  <LocaleSwitcher />
 </template>
 
 <script lang="ts">
@@ -28,6 +29,7 @@ import { getTranslatedMetaInfo } from "./utils/metaInfo";
 import { SvgRegion } from "@/types/SvgRegion";
 import { RegionInfo } from "@/types/RegionInfo";
 import CountryInfoComponent from "./CountryInfoComponent.vue";
+import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { RegionId } from "@/types/Region";
 import { getDatesDiff } from "./utils/date";
 
@@ -50,6 +52,7 @@ export default defineComponent({
     CoundownComponent,
     RegionInfoComponent,
     CountryInfoComponent,
+    LocaleSwitcher,
   },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
