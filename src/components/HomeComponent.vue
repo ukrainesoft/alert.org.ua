@@ -90,10 +90,11 @@ export default defineComponent({
 
         let dateDiff = getDatesDiff(regionStatus.date, new Date());
         dateDiff.h = dateDiff.d * 24 + dateDiff.h;
-        let h = dateDiff.h < 10 ? "0" + dateDiff.h : dateDiff.h;
-        let m = dateDiff.m < 10 ? "0" + dateDiff.m : dateDiff.m;
 
-        titles[regionStatus.regionId] = h + ":" + m;
+        titles[regionStatus.regionId] =
+          this.$t("message.region_info_hours_short", dateDiff.h) +
+          " " +
+          this.$t("message.region_info_minutes_short", dateDiff.m);
       });
 
       return titles;

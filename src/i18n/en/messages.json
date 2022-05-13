@@ -8,7 +8,9 @@
   "region_info_region_status_1": "{region} region is in danger",
   "region_info_days": "0 | {n} day | {n} days",
   "region_info_hours": "0 | {n} hour | {n} hours",
+  "region_info_hours_short": "  | {n}h | {n}h",
   "region_info_minutes": "0 | {n} minute | {n} minutes",
+  "region_info_minutes_short": "  | {n}m | {n}m",
   "country_info_safe_title": "There is no air alert",
   "country_info_alert_title": "Ukraine is in danger"
 }
