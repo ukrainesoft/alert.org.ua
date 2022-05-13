@@ -37,8 +37,9 @@ export default defineComponent({
 .region text {
   fill: var(--text-color-light);
   stroke: var(--background-color);
-  stroke-width: 0.1;
+  stroke-width: 0.7;
   font-size: 26px;
   letter-spacing: 0;
+  text-shadow: 0 0 5px var(--primary-color);
 }
 </style>

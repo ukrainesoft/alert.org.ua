@@ -8,7 +8,9 @@
   "region_info_region_status_1": "{region} у небезпеці",
   "region_info_days": "0 | {n} день | {n} дня | {n} днів",
   "region_info_hours": "0 | {n} годину | {n} години | {n} годин",
+  "region_info_hours_short": "  | {n}г | {n}г | {n}г",
   "region_info_minutes": "0 | {n} хвилину | {n} хвилини | {n} хвилин",
+  "region_info_minutes_short": "  | {n}х | {n}х | {n}х",
   "country_info_safe_title": "Сирени не лунають",
   "country_info_alert_title": "Україна у небезпеці"
 }
