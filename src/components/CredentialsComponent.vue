@@ -16,8 +16,8 @@ export default {
 
 <style scoped>
 .creds {
-  bottom: 10px;
-  right: 10px;
+  bottom: 0px;
+  right: 0px;
   position: absolute;
   text-align: right;
   line-height: 14px;
