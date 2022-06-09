@@ -23,7 +23,7 @@ export const RegionsMap: Record<string, string> = {
   ІваноФранківська_область: "ivano-frankivsk",
   Тернопільська_область: "ternopil",
   Закарпатська_область: "zakarpattia",
-  Чернівецька_област: "chernivtsi",
+  Чернівецька_область: "chernivtsi",
   АРК: "crimea",
   Севастополь: "sevastopol",
 };
