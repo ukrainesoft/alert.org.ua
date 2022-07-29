@@ -12,5 +12,8 @@
   "region_info_minutes": "0 | {n} minute | {n} minutes",
   "region_info_minutes_short": "  | {n}m | {n}m",
   "country_info_safe_title": "There is no air alert",
-  "country_info_alert_title": "Ukraine is in danger"
+  "country_info_alert_title": "Ukraine is in danger",
+  "titles_mode_minutes": "minutes",
+  "titles_mode_name": "titles",
+  "titles_mode_none": " - "
 }
