@@ -12,5 +12,8 @@
   "region_info_minutes": "0 | {n} хвилину | {n} хвилини | {n} хвилин",
   "region_info_minutes_short": "  | {n}х | {n}х | {n}х",
   "country_info_safe_title": "Сирени не лунають",
-  "country_info_alert_title": "Україна у небезпеці"
+  "country_info_alert_title": "Україна у небезпеці",
+  "titles_mode_minutes": "хвилини",
+  "titles_mode_name": "назви",
+  "titles_mode_none": " - "
 }

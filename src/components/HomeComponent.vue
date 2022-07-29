@@ -14,10 +14,12 @@
   />
   <CoundownComponent @click="refreshRegions" @timeOver="refreshRegions" />
   <LocaleSwitcher />
+  <TitleSwitcher @onTitleModeChanged="onTitlesModeChanged" />
 </template>
 
 <script lang="ts">
 // TODO: Selected region move to the HOC
+// TODO: Move regions to the HOC
 import { defineComponent } from "@vue/runtime-core";
 import SvgUkraineMap from "./svg/UkraineMap.vue";
 import { RegionRepository } from "../repository/RegionRepository";
@@ -32,8 +34,10 @@ import { RegionInfo } from "@/types/RegionInfo";
 import CountryInfoComponent from "./CountryInfoComponent.vue";
 import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { RegionId } from "@/types/Region";
-import { getDatesDiff } from "./utils/date";
-import { useMeta } from "vue-meta";
+import { useI18n } from "vue-i18n";
+import TitleSwitcher from "./TitleSwitcher.vue";
+import { Mode as TitleMode } from "./utils/region/TitleGenerator/Mode";
+import { TitleGeneratorFactory } from "./utils/region/TitleGenerator/TitleGeneratorFactory";
 
 const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
@@ -55,10 +59,10 @@ export default defineComponent({
     RegionInfoComponent,
     CountryInfoComponent,
     LocaleSwitcher,
+    TitleSwitcher,
   },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
-    useMeta(getTranslatedMetaInfo(this.regionStatuses));
   },
   methods: {
     async refreshRegions() {
@@ -77,34 +81,33 @@ export default defineComponent({
         this.selectedRegionInfo = undefined;
       }
     },
+    onTitlesModeChanged(mode: TitleMode) {
+      this.titleMode = mode;
+    },
   },
   data() {
     return {
       regionStatuses: [] as RegionStatus[],
       selectedRegionInfo: undefined as RegionInfo | undefined,
+      titleMode: Object.values(TitleMode)[0],
     };
   },
   computed: {
-    // The region title is time from the last alert or an empty string
     regionTitles(): Record<RegionId, string> {
+      const i18n = useI18n();
+      const titleGenerator = new TitleGeneratorFactory(i18n.t).create(
+        this.titleMode
+      );
+
       let titles: Record<RegionId, string> = {};
       this.regionStatuses.map((regionStatus) => {
-        if (!regionStatus?.date || regionStatus.status === Status.OK) {
-          titles[regionStatus.regionId] = "";
-          return;
-        }
-
-        let dateDiff = getDatesDiff(regionStatus.date, new Date());
-        dateDiff.h = dateDiff.d * 24 + dateDiff.h;
-
-        titles[regionStatus.regionId] =
-          this.$t("message.region_info_hours_short", dateDiff.h) +
-          " " +
-          this.$t("message.region_info_minutes_short", dateDiff.m);
+        titles[regionStatus.regionId] = titleGenerator.generate(regionStatus);
       });
-
       return titles;
     },
+  },
+  metaInfo(): any {
+    return getTranslatedMetaInfo(this.regionStatuses);
   },
 });
 </script>
