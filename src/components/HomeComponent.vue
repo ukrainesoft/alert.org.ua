@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+// TODO: Selected region move to the HOC
 import { defineComponent } from "@vue/runtime-core";
 import SvgUkraineMap from "./svg/UkraineMap.vue";
 import { RegionRepository } from "../repository/RegionRepository";
@@ -32,6 +33,7 @@ import CountryInfoComponent from "./CountryInfoComponent.vue";
 import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { RegionId } from "@/types/Region";
 import { getDatesDiff } from "./utils/date";
+import { useMeta } from "vue-meta";
 
 const loadRegionsStatuses = async () => {
   const statusService = new TelegramRegionStatusService();
@@ -56,6 +58,7 @@ export default defineComponent({
   },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
+    useMeta(getTranslatedMetaInfo(this.regionStatuses));
   },
   methods: {
     async refreshRegions() {
@@ -102,10 +105,6 @@ export default defineComponent({
 
       return titles;
     },
-  },
-  // Used by vue-meta plugin
-  metaInfo() {
-    return getTranslatedMetaInfo(this.regionStatuses);
   },
 });
 </script>

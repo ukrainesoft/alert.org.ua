@@ -12,53 +12,13 @@
 <script lang="ts">
 import { Icon } from "@iconify/vue";
 
-type SocialNetworkIconData = {
-  icon: string;
-  url: string;
-  params: Record<string, string>;
-};
 export default {
   components: { Icon },
   data() {
+    const socialNetworkIconsData: SocialNetworkIconData[] =
+      getSocialNetworkIconsData();
     return {
-      socialNetworkIconsData: [
-        {
-          icon: "cib:twitter",
-          url: "https://twitter.com/share",
-          params: {
-            url: document.location.href,
-            text: document.title,
-          },
-        },
-        {
-          icon: "cib:facebook-f",
-          url: "https://www.facebook.com/sharer/sharer.php",
-          params: {
-            u: document.location.href,
-          },
-        },
-        {
-          icon: "cib:whatsapp",
-          url: "https://api.whatsapp.com/send",
-          params: {
-            text: document.location.href,
-          },
-        },
-        {
-          icon: "cib:viber",
-          url: "viber://forward",
-          params: {
-            text: document.location.href,
-          },
-        },
-        {
-          icon: "cib:telegram-plane",
-          url: "https://telegram.me/share/url",
-          params: {
-            url: document.location.href,
-          },
-        },
-      ],
+      socialNetworkIconsData,
     };
   },
   methods: {
@@ -71,6 +31,53 @@ export default {
     },
   },
 };
+
+type SocialNetworkIconData = {
+  icon: string;
+  url: string;
+  params: Record<string, string>;
+};
+
+function getSocialNetworkIconsData(): SocialNetworkIconData[] {
+  return [
+    {
+      icon: "cib:twitter",
+      url: "https://twitter.com/share",
+      params: {
+        url: document.location.href,
+        text: document.title,
+      },
+    },
+    {
+      icon: "cib:facebook-f",
+      url: "https://www.facebook.com/sharer/sharer.php",
+      params: {
+        u: document.location.href,
+      },
+    },
+    {
+      icon: "cib:whatsapp",
+      url: "https://api.whatsapp.com/send",
+      params: {
+        text: document.location.href,
+      },
+    },
+    {
+      icon: "cib:viber",
+      url: "viber://forward",
+      params: {
+        text: document.location.href,
+      },
+    },
+    {
+      icon: "cib:telegram-plane",
+      url: "https://telegram.me/share/url",
+      params: {
+        url: document.location.href,
+      },
+    },
+  ];
+}
 </script>
 
 <style scoped>

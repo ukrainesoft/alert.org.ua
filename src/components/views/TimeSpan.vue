@@ -20,7 +20,7 @@ export default defineComponent({
   props: {
     date: {
       type: Date,
-      required: true,
+      required: false,
     },
   },
   computed: {

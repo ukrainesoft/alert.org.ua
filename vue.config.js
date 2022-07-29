@@ -14,7 +14,7 @@ module.exports = defineConfig({
       ogDescription:
         "❗❗The site represents air alarms in the regions of Ukraine",
       ogType: "website",
-      ogImage: "https://alert.org.ua/ogimage.png",
+      ogImage: process.env.VUE_APP_OG_IMAGE,
     },
   },
 });

@@ -27,6 +27,7 @@ export default defineComponent({
   props: {
     regionInfo: {
       type: RegionInfo,
+      required: true,
     },
   },
   computed: {
