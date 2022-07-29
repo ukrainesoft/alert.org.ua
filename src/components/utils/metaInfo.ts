@@ -35,7 +35,7 @@ export function getTranslatedMetaInfo(regionStatuses: RegionStatus[]) {
       { property: "og:title", content: title },
       {
         property: "og:image",
-        content: getOgImage(regionsInADanger),
+        content: process.env.VUE_APP_OG_IMAGE,
       },
       {
         property: "og:description",
@@ -44,16 +44,3 @@ export function getTranslatedMetaInfo(regionStatuses: RegionStatus[]) {
     ],
   };
 }
-
-// TODO Move to the config file
-const META_OG_CONFIG = {
-  "og:image": "https://alert.org.ua/ukraine.svg",
-};
-
-// TODO Move titles to the i18n level
-const getOgImage = (regionStatuses: RegionStatus[]) =>
-  META_OG_CONFIG["og:image"] +
-  "?" +
-  regionStatuses
-    .map((regionStatus: RegionStatus) => regionStatus.regionId)
-    .join(",");
