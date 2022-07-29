@@ -34,7 +34,6 @@ import { RegionInfo } from "@/types/RegionInfo";
 import CountryInfoComponent from "./CountryInfoComponent.vue";
 import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { RegionId } from "@/types/Region";
-import { useMeta } from "vue-meta";
 import { useI18n } from "vue-i18n";
 import TitleSwitcher from "./TitleSwitcher.vue";
 import { Mode as TitleMode } from "./utils/region/TitleGenerator/Mode";
@@ -64,7 +63,6 @@ export default defineComponent({
   },
   async mounted() {
     this.regionStatuses = await loadRegionsStatuses();
-    useMeta(getTranslatedMetaInfo(this.regionStatuses));
   },
   methods: {
     async refreshRegions() {
@@ -107,6 +105,9 @@ export default defineComponent({
       });
       return titles;
     },
+  },
+  metaInfo(): any {
+    return getTranslatedMetaInfo(this.regionStatuses);
   },
 });
 </script>
