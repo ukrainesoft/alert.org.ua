@@ -23,8 +23,7 @@ export enum Theme {
 }
 
 function getOSTheme() {
-  return window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
+  return !localStorage.theme || localStorage.theme === Theme.DARK
     ? Theme.DARK
     : Theme.LIGHT;
 }
@@ -57,6 +56,11 @@ export default defineComponent({
   },
   mounted() {
     this.setTheme(getOSTheme());
+  },
+  watch: {
+    currentTheme(newTheme: string) {
+      localStorage.theme = newTheme;
+    },
   },
 });
 </script>
